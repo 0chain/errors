@@ -3,21 +3,12 @@ package errors
 import (
 	"fmt"
 	"strings"
-
-	"github.com/pkg/errors"
 )
 
 /*Error type for a new application error */
 type Error struct {
 	Code string `json:"code,omitempty"`
 	Msg  string `json:"msg"`
-}
-
-func (err *Error) Error() string {
-	if err.Code == "" {
-		return err.Msg
-	}
-	return fmt.Sprintf("%s: %s", err.Code, err.Msg)
 }
 
 /*
@@ -31,61 +22,55 @@ if two arguments are passed then
 	second argument is considered for message
 */
 func New(args ...string) *Error {
+	return new(args...)
+}
+
+/*
+Newf - creates a new error
+*/
+func Newf(code string, format string, args ...interface{}) *Error {
+	return new(code, fmt.Sprintf(format, args...))
+}
+
+func (err *Error) Error() string {
+	if err.Code == "" {
+		return err.Msg
+	}
+	return fmt.Sprintf("%s: %s", err.Code, err.Msg)
+}
+
+func new(args ...string) *Error {
 	currentError := Error{}
 
 	switch len(args) {
 	case 1:
-		currentError.Msg = args[0]
+		currentError.Msg = strings.TrimSpace(args[0])
 	case 2:
-		currentError.Code = args[0]
-		currentError.Msg = args[1]
+		if isInvalidCode(args[0]) {
+			return invalidCode(args[0])
+		}
+		currentError.Code, currentError.Msg = strings.TrimSpace(args[0]), strings.TrimSpace(args[1])
 	default:
-		currentError.Code = "incorrect_usage"
-		currentError.Msg = "you should at least pass message to create a proper error!"
+		return invalidUsage(args...)
 	}
 
 	return &currentError
 }
 
-func Newf(code string, format string, args ...interface{}) *Error {
-	return New(code, fmt.Sprintf(format, args...))
-}
-
-func Wrap(err error, message string) error {
-	if err == nil {
-		err = errors.New("")
-	}
-	return errors.Wrap(err, message)
-}
-
-func Is(err error, target *Error) bool {
-	if err == nil {
-		return false
-	}
-	actualError := isError(err)
-	if actualError != nil {
-		if actualError.Code == "" && target.Code == "" {
-			return actualError.Msg == target.Msg
-		} else {
-			return actualError.Code == target.Code
-		}
-	} else {
-		return is(err, target)
+func invalidUsage(args ...string) *Error {
+	return &Error{
+		Code: "incorrect_usage",
+		Msg:  fmt.Sprintf("max allowed parameters is 2 i.e code, msg. parameters sent - %d", len(args)),
 	}
 }
 
-func is(err error, target *Error) bool {
-	compareWith := target.Code
-	if compareWith == "" {
-		compareWith = target.Msg
+func invalidCode(code string) *Error {
+	return &Error{
+		Code: "incorrect_code",
+		Msg:  "code should not have spaces. use '" + strings.ToLower(strings.ReplaceAll(code, " ", "_")) + "' instead of '" + code + "'",
 	}
-	return strings.Contains(strings.Trim(strings.Split(err.Error(), " ")[0], ":"), compareWith)
 }
 
-func isError(err error) *Error {
-	t, ok := err.(*Error)
-	if ok {
-		return t
-	}
-	return nil
+func isInvalidCode(code string) bool {
+	return len(strings.Split(code, " ")) != 1
 }
