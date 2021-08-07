@@ -1,3 +1,4 @@
+// Package errors - withError implementing error interface
 package errors
 
 type withError struct {

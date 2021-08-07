@@ -1,3 +1,4 @@
+// Package errors - application error interface implementation
 package errors
 
 import (

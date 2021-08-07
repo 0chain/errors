@@ -1,3 +1,4 @@
+// Package errors - wrapping errors
 package errors
 
 import (

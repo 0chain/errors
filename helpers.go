@@ -1,3 +1,4 @@
+// Package errors - helpers
 package errors
 
 // Top since errors can be wrapped and stacked,
@@ -8,4 +9,14 @@ func Top(err error) string {
 	}
 	current, _ := UnWrap(err)
 	return current.Error()
+}
+
+func Cause(err error) error {
+	var current, previous error
+	for {
+		current, previous = UnWrap(err)
+		if previous == nil {
+			return current
+		}
+	}
 }
