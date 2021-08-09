@@ -17,11 +17,11 @@ func (e *ApplicationError) Error() string {
 	}
 
 	if e.Inner != nil && e.MsgList != nil {
-		return e.Inner.Error() + ": " + strings.Join(e.MsgList, ", ")
+		return e.Inner.Error() + ": " + strings.Join(e.MsgList, " ")
 	} else if e.Inner != nil {
 		return e.Inner.Error()
 	} else {
-		return strings.Join(e.MsgList, ", ")
+		return strings.Join(e.MsgList, " ")
 	}
 
 }
