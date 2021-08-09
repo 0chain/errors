@@ -32,7 +32,7 @@ func TestThrowAs(t *testing.T) {
 
 	inner := errors.New("Inner")
 
-	err := Throw(inner, "errors.Unwrap works")
+	err := Throw(inner, "errors.As works")
 
 	var appErr *ApplicationError
 
