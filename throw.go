@@ -31,7 +31,12 @@ func (e *ApplicationError) Unwrap() error {
 	if e == nil {
 		return nil
 	}
-	return e.Inner
+
+	if e.Inner != nil {
+		return e.Inner
+	}
+
+	return e
 }
 
 // Throw create an application error with prefinded error variable and message
