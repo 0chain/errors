@@ -105,7 +105,7 @@ fmt.Println(cause) => password mismatch
 
 ```
 
-## Throw Working with go standard Errors
+## Working with [Errors](https://blog.golang.org/go1.13-errors) package
 
 How to raise an `ApplicationError` with predefined error variables?
 
@@ -114,7 +114,7 @@ var ErrInvalidFormat = errors.New("[conf]invalid format")
 
 func ReadConfig()  (*Config,error) {
    //...
-   return nil, errors.Throw(ErrInvalidFormat, cfgFile)
+   return nil, Throw(ErrInvalidFormat, cfgFile)
 
 }
 
