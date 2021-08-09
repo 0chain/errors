@@ -1,11 +1,13 @@
 package errors
 
+import "strings"
+
 // ApplicationError an appliction error with predifined error variable and detail message
 type ApplicationError struct {
 	// Inner inner error
 	Inner error
-	// Message detail message
-	Message string
+	// MsgList detail message
+	MsgList []string
 }
 
 // Error implement error.Error
@@ -14,12 +16,12 @@ func (e *ApplicationError) Error() string {
 		return ""
 	}
 
-	if e.Inner != nil && e.Message != "" {
-		return e.Inner.Error() + ": " + e.Message
+	if e.Inner != nil && e.MsgList != nil {
+		return e.Inner.Error() + ": " + strings.Join(e.MsgList, ", ")
 	} else if e.Inner != nil {
 		return e.Inner.Error()
 	} else {
-		return e.Message
+		return strings.Join(e.MsgList, ", ")
 	}
 
 }
@@ -35,9 +37,9 @@ func (e *ApplicationError) Unwrap() error {
 // Throw create an application error with prefinded error variable and message
 // example
 //    errors.Throw(ErrInvalidParameter, "bloober_id is missing")
-func Throw(inner error, message string) error {
+func Throw(inner error, msgList ...string) error {
 	return &ApplicationError{
 		Inner:   inner,
-		Message: message,
+		MsgList: msgList,
 	}
 }

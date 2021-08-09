@@ -13,7 +13,7 @@ func TestThrowIs(t *testing.T) {
 
 	errIsNot := errors.New("Is not")
 
-	err := Throw(errIs, "errors.Is works")
+	err := Throw(errIs, "", "errors.Is works")
 
 	require.ErrorIs(t, err, errIs)
 	require.Equal(t, false, errors.Is(err, errIsNot))
