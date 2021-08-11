@@ -8,6 +8,8 @@ import (
 
 type newErrorTestCase struct {
 	about           string
+	code            string
+	msg             string
 	args            []string
 	expectedCode    string
 	expectedMessage string
@@ -17,51 +19,31 @@ func getNewErrorTestCase() []newErrorTestCase {
 	return []newErrorTestCase{
 		{
 			about:           "creating an error with code and msg.",
-			args:            []string{"500", "This is a very big error! Beware of it!"},
+			code:            "500",
+			msg:             "This is a very big error! Beware of it!",
 			expectedCode:    "500",
 			expectedMessage: "This is a very big error! Beware of it!",
 		},
 		{
 			about:           "creating an error with empty code and msg.",
-			args:            []string{"", "This is a very big error! Beware of it!"},
+			code:            "",
+			msg:             "This is a very big error! Beware of it!",
 			expectedCode:    "",
 			expectedMessage: "This is a very big error! Beware of it!",
 		},
 		{
 			about:           "creating an error with code and empty msg.",
-			args:            []string{"401", ""},
+			code:            "401",
+			msg:             "",
 			expectedCode:    "401",
 			expectedMessage: "",
 		},
 		{
 			about:           "creating an error with just msg.",
-			args:            []string{"This is a short error!"},
+			code:            "",
+			msg:             "This is a short error!",
 			expectedCode:    "",
 			expectedMessage: "This is a short error!",
-		},
-		{
-			about:           "creating an error by passing 3 parameters which is not allowed",
-			args:            []string{"code", "message", "third"},
-			expectedCode:    "incorrect_usage",
-			expectedMessage: "max allowed parameters is 2 i.e code, msg. parameters sent - 3",
-		},
-		{
-			about:           "creating an error by passing 4 parameters which is not allowed",
-			args:            []string{"code", "message", "third", "fourth"},
-			expectedCode:    "incorrect_usage",
-			expectedMessage: "max allowed parameters is 2 i.e code, msg. parameters sent - 4",
-		},
-		{
-			about:           "creating an error with empty parameters",
-			args:            []string{},
-			expectedCode:    "incorrect_usage",
-			expectedMessage: "max allowed parameters is 2 i.e code, msg. parameters sent - 0",
-		},
-		{
-			about:           "creating an error with spaces in code",
-			args:            []string{"This is a very long code", "This is its very long message"},
-			expectedCode:    "incorrect_code",
-			expectedMessage: "code should not have spaces. use 'this_is_a_very_long_code' instead of 'This is a very long code'",
 		},
 	}
 }
@@ -69,7 +51,7 @@ func getNewErrorTestCase() []newErrorTestCase {
 func TestNew(t *testing.T) {
 	for _, tc := range getNewErrorTestCase() {
 		t.Run(tc.about, func(t *testing.T) {
-			err := New(tc.args...)
+			err := New(tc.code, tc.msg)
 
 			require.Equal(t, tc.expectedCode, err.Code)
 			require.Equal(t, tc.expectedMessage, err.Msg)
@@ -80,7 +62,7 @@ func TestNew(t *testing.T) {
 func TestError(t *testing.T) {
 	for _, tc := range getNewErrorTestCase() {
 		t.Run(tc.about, func(t *testing.T) {
-			err := New(tc.args...)
+			err := New(tc.code, tc.msg)
 
 			require.Contains(t, err.Error(), tc.expectedMessage)
 		})

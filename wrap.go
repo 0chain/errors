@@ -3,7 +3,6 @@ package errors
 
 import (
 	"fmt"
-	"strings"
 )
 
 // Wrap - wraps the previous error with current error/ message
@@ -13,11 +12,7 @@ func Wrap(previous error, current interface{}) error {
 	case error:
 		currentError = c
 	case string:
-		if strings.TrimSpace(c) == "" {
-			currentError = invalidWrap("empty string")
-		} else {
-			currentError = new(c)
-		}
+		currentError = new("", c)
 	default:
 		currentError = invalidWrap("unsupported type, it should be either of type error/string")
 	}
@@ -28,6 +23,7 @@ func Wrap(previous error, current interface{}) error {
 	}
 }
 
+// UnWrap - unwraps the error to gives the wrapping error and actual error
 func UnWrap(err error) (current error, previous error) {
 	switch e := err.(type) {
 	case *withError:
