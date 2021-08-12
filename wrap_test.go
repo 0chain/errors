@@ -39,7 +39,7 @@ func getWrapTopTestCases() []wrapTopTestCase {
 				"This is a short error!",
 				"",
 			},
-			expectedTopMessage: "incorrect_usage: you should pass either error or message to properly wrap the error! - wrapped with empty string",
+			expectedTopMessage: "",
 		},
 		{
 			about: "wrapping errors and messages",
