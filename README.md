@@ -1,10 +1,12 @@
-errors
+# 0chain/errors
 
 A simple errors package
 
+```
 go get github.com/0chain/errors
+```
 
-we introduce a new applicaiton error which has errorCode and errorMsg. 
+we introduce a new application error which has errorCode and errorMsg. 
 
 ```
 type Error struct {
@@ -96,13 +98,12 @@ fmt.Println(current) => password mismatch
 fmt.Println(previous) => nil
 ```
 
-Retrieving the cause of an error, The `errors.Cause` function is the way to go
+For retrieving the cause of an error, The `errors.Cause` function is the way to go
 
 ```
-cause = auth("username", "password")
+err = auth("username", "password")
 
-fmt.Println(cause) => password mismatch
-
+fmt.Println(errors.Cause(err)) => password mismatch
 ```
 
 ## Working with [Errors](https://blog.golang.org/go1.13-errors) package

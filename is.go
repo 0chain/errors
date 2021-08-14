@@ -1,6 +1,8 @@
 // Package errors - Is
 package errors
 
+import "errors"
+
 /*Is - tells whether actual error is targer error
 where, actual error can be either Error/withError
 if actual error is wrapped error then if any internal error
@@ -24,6 +26,6 @@ func Is(actual error, target error) bool {
 			return false
 		}
 	default:
-		return actual == target
+		return errors.Is(actual, target)
 	}
 }

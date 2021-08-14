@@ -28,7 +28,7 @@ func getTopTestCases() []topTestCase {
 		},
 		{
 			about:              "error from 0chain errors package",
-			err:                New("error from 0chain errors package"),
+			err:                New("", "error from 0chain errors package"),
 			expectedTopMessage: "error from 0chain errors package",
 		},
 		{

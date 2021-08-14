@@ -11,6 +11,7 @@ func Top(err error) string {
 	return current.Error()
 }
 
+// Cause returns the underlying cause of the error
 func Cause(err error) error {
 	var current, previous error
 	for {

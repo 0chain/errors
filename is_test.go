@@ -28,17 +28,13 @@ func getIsErrorWrapTestCases() []isErrorWrapTestCase {
 				New("500", "This is a very big error! Beware of it!"),
 				New("", "This is a very big error! Beware of it!"),
 				New("401", ""),
-				New("This is a short error!"),
-				New("code", "message", "third"),
-				New("code", "message", "third", "fourth"),
-				New(),
+
 				errors.New("error created from err package"),
 				fmt.Errorf("%s", "error created from fmt package"),
 				nil,
 			},
 			testCase: map[error]bool{
 				New("500", "This is a very big error! Beware of it!"): true,
-				New("500"): false,
 			},
 		},
 		{
@@ -50,7 +46,7 @@ func getIsErrorWrapTestCases() []isErrorWrapTestCase {
 			},
 			testCase: map[error]bool{
 				New("500", "This is a very big error! Beware of it!"): true,
-				New("500"): false,
+
 				new("500", "This is a very big error! Beware of it!!!!!"): true,
 			},
 		},
@@ -61,7 +57,6 @@ func getIsErrorWrapTestCases() []isErrorWrapTestCase {
 			},
 			testCase: map[error]bool{
 				New("500", "This is a very big error! Beware of it!"): true,
-				New("500"): false,
 			},
 		},
 	}
@@ -79,7 +74,7 @@ func isErrorTestCases() []isErrorTestCase {
 		{
 			about:       "actual error and target Error",
 			actualError: errors.New("actual error"),
-			targetError: New("actual error"),
+			targetError: New("", "actual error"),
 			expected:    false,
 		},
 		{
@@ -102,8 +97,8 @@ func isErrorTestCases() []isErrorTestCase {
 		},
 		{
 			about:       "actual withError and target error",
-			actualError: Wrap(Wrap(New("actual error"), "wrapped error1"), "wrapped error2"),
-			targetError: New("wrapped error1"),
+			actualError: Wrap(Wrap(New("", "actual error"), "wrapped error1"), "wrapped error2"),
+			targetError: New("", "wrapped error1"),
 			expected:    true,
 		},
 	}
