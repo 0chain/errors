@@ -8,8 +8,11 @@ import (
 type ApplicationError struct {
 	// Inner inner error
 	Inner error
+
 	// MsgList detail message
 	MsgList []string
+
+	traceid string
 }
 
 // Error implement error.Error
@@ -18,13 +21,21 @@ func (e *ApplicationError) Error() string {
 		return ""
 	}
 
-	if e.Inner != nil && e.MsgList != nil {
-		return e.Inner.Error() + ": " + strings.Join(e.MsgList, " ")
-	} else if e.Inner != nil {
-		return e.Inner.Error()
-	} else {
-		return strings.Join(e.MsgList, " ")
+	output := ""
+
+	if e.traceid != "" {
+		output = "[traceid-" + e.traceid + "] "
 	}
+
+	if e.Inner != nil && e.MsgList != nil {
+		output += e.Inner.Error() + ": " + strings.Join(e.MsgList, "\r\n")
+	} else if e.Inner != nil {
+		output += e.Inner.Error()
+	} else {
+		output += strings.Join(e.MsgList, " ")
+	}
+
+	return output
 
 }
 
@@ -60,14 +71,10 @@ func ThrowLog(raw string, inner error, msgList ...string) error {
 
 	traceid := generateTraceID(callerName, raw)
 
-	if traceid == "" {
-		return &ApplicationError{
-			Inner:   inner,
-			MsgList: append([]string{raw}, msgList...),
-		}
-	}
 	return &ApplicationError{
+		traceid: traceid,
 		Inner:   inner,
-		MsgList: append([]string{"traceid: " + traceid}, msgList...),
+		MsgList: msgList,
 	}
+
 }
