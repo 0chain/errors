@@ -1,6 +1,8 @@
 package errors
 
-import "strings"
+import (
+	"strings"
+)
 
 // ApplicationError an appliction error with predifined error variable and detail message
 type ApplicationError struct {
@@ -46,5 +48,26 @@ func Throw(inner error, msgList ...string) error {
 	return &ApplicationError{
 		Inner:   inner,
 		MsgList: msgList,
+	}
+}
+
+// ThrowLog create an application error with prefinded error variable and message, log critical error in logging system for debugging.
+// example
+//    errors.ThrowLog(err.Error(), ErrInvalidParameter, "bloober_id is missing")
+func ThrowLog(raw string, inner error, msgList ...string) error {
+
+	callerName := getCallerName(1)
+
+	traceid := generateTraceID(callerName, raw)
+
+	if traceid == "" {
+		return &ApplicationError{
+			Inner:   inner,
+			MsgList: append([]string{raw}, msgList...),
+		}
+	}
+	return &ApplicationError{
+		Inner:   inner,
+		MsgList: append([]string{"traceid: " + traceid}, msgList...),
 	}
 }
