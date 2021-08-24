@@ -134,4 +134,21 @@ if errors.Is(err, ErrInvalidFormat) {
 See [Unit Tests](throw_test.go) for more examples.
 
 
+## Logging and track Unhandled Exception with traceid
+
+### What is an Unhandled Exception?
+An exception is a known type of error. An unhandled exception occurs when the application code does not properly handle exceptions. 
+
+For example, When you try to read data from database, it is a common problem for the network is lost. We need show user an firendly message (eg. ServiceUnavailable),logging raw error in logging system, and trigger DevOps alert from log monitor system.
+
+
+```
+var ErrServiceUnavailable = errors.New("Service unavailable")
+if err != nil { //any network/db error
+    if errors.Is(err, ErrHasNotShared) {
+         return nil, err
+    }
+    return nil, errors.ThrowLog(err,ErrServiceUnavailable)
+}
+```
 
