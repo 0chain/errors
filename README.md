@@ -134,10 +134,10 @@ if errors.Is(err, ErrInvalidFormat) {
 See [Unit Tests](throw_test.go) for more examples.
 
 
-## Logging and track Unhandled Error with traceid
+## Logging and track Unhandled Exception with traceid
 
 ### What is an Unhandled Error?
-An error is a known type of error. An unhandled error occurs when the application code does not properly handle exceptions. 
+An exception is a known type of error. An unhandled exception occurs when the application code does not properly handle exceptions. 
 
 For example, When you try to read a row from database, it is a common problem for the network is lost. We need show use an firendly message (eg. ServiceUnavailable),and logging raw error in logging system. It is better to trigger DevOps alert on log monitor system.
 
