@@ -17,6 +17,11 @@ type ApplicationError struct {
 
 // Error implement error.Error
 func (e *ApplicationError) Error() string {
+	return e.String()
+}
+
+// Error implement Stringer
+func (e *ApplicationError) String() string {
 	if e == nil {
 		return ""
 	}
@@ -36,7 +41,6 @@ func (e *ApplicationError) Error() string {
 	}
 
 	return output
-
 }
 
 // Unwrap implement error.Unwrap

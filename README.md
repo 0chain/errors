@@ -134,4 +134,17 @@ if errors.Is(err, ErrInvalidFormat) {
 See [Unit Tests](throw_test.go) for more examples.
 
 
+## Logging and track unhandled error with traceid
+
+
+
+```
+var ErrServiceUnavailable = errors.New("Service unavailable")
+if err != nil { //any network/db error
+    if errors.Is(err, ErrHasNotShared) {
+         return nil, err
+    }
+    return nil, errors.ThrowLog(err,ErrServiceUnavailable)
+}
+```
 
