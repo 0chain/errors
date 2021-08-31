@@ -3,15 +3,15 @@ package errors
 import (
 	"errors"
 	"fmt"
-	"testing"
-
 	"io/fs"
+	"testing"
 
 	"github.com/stretchr/testify/require"
 )
 
 var (
 	ErrInvalid = fs.ErrInvalid // "invalid argument"
+	ErrInternal = New("internal_error", "this is a internal error")
 )
 
 type isErrorWrapTestCase struct {
@@ -100,6 +100,12 @@ func isErrorTestCases() []isErrorTestCase {
 			actualError: Wrap(Wrap(New("", "actual error"), "wrapped error1"), "wrapped error2"),
 			targetError: New("", "wrapped error1"),
 			expected:    true,
+		},
+		{
+			about: "internal error",
+			actualError: Wrap(ErrInternal, "internal server error"),
+			targetError: ErrInternal,
+			expected: true,
 		},
 	}
 }
