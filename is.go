@@ -4,6 +4,7 @@ package errors
 import (
 	"errors"
 	"fmt"
+	"reflect"
 )
 
 /*Is - tells whether actual error is targer error
@@ -13,8 +14,11 @@ matches the target error then function results in true*/
 func Is(actual error, target error) bool {
 
 	fmt.Println("Is ..................................... 1")
+
 	fmt.Println("actual error:", actual)
+	fmt.Println("actual error kind:", reflect.ValueOf(actual).Kind())
 	fmt.Println("target error:", target)
+	fmt.Println("target error kind:", reflect.ValueOf(target).Kind())
 	fmt.Println("Is ..................................... 2")
 
 	if errors.Is(actual, target) {
@@ -34,8 +38,11 @@ func Is(actual error, target error) bool {
 			}
 
 			fmt.Println("Is ..................................... 5.2")
-			fmt.Println(actualError.Code)
-			fmt.Println(targetError.Code)
+			fmt.Println("actualError.Code: ", actualError.Code)
+			fmt.Println("actualError.Msg: ", actualError.Msg)
+			fmt.Println("targetError.Code: ", targetError.Code)
+			fmt.Println("targetError.Msg: ", targetError.Msg)
+
 			fmt.Println("actualError.Code == targetError.Code: ", actualError.Code == targetError.Code)
 			return actualError.Code == targetError.Code
 
