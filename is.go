@@ -29,9 +29,14 @@ func Is(actual error, target error) bool {
 		case *Error:
 			fmt.Println("Is ..................................... 5")
 			if actualError.Code == "" && targetError.Code == "" {
+				fmt.Println("Is ..................................... 5.1")
 				return actualError.Msg == targetError.Msg
 			}
 
+			fmt.Println("Is ..................................... 5.2")
+			fmt.Println(actualError.Code)
+			fmt.Println(targetError.Code)
+			fmt.Println("actualError.Code == targetError.Code: ", actualError.Code == targetError.Code)
 			return actualError.Code == targetError.Code
 
 		case *withError:
