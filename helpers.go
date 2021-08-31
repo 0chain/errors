@@ -11,6 +11,11 @@ func Top(err error) string {
 	return current.Error()
 }
 
+func IsTop(err error, target error) bool {
+	top, _ := UnWrap(err)
+	return Is(top, target)
+}
+
 // Cause returns the underlying cause of the error
 func Cause(err error) error {
 	var current, previous error
