@@ -21,12 +21,12 @@ jobs:
           echo ::set-output name=YESTERDAY_DATE::${YESTERDAY_DATE}
           echo $GIT_COMMIT_DATE
           echo $YESTERDAY_DATE
-          
+
       - name: Create backup
         if: steps.get_info.outputs.GIT_COMMIT_DATE == steps.get_info.outputs.YESTERDAY_DATE
         run: |
           github-backup 0chain -P -t ${{ secrets.ACCESS_TOKEN }} --output-directory=/github-backup/errors --all -O -R errors
-        
+
       - name: Create zip
         if: steps.get_info.outputs.GIT_COMMIT_DATE == steps.get_info.outputs.YESTERDAY_DATE
         run: zip -r errors.zip /github-backup/errors
